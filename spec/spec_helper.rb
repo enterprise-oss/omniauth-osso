@@ -3,7 +3,7 @@
 $LOAD_PATH.unshift File.expand_path(__dir__)
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
-require 'omniauth_osso'
+require 'omniauth-osso'
 
 require 'omniauth'
 require 'omniauth-oauth2'

@@ -5,6 +5,10 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
 
+Naming/FileName:
+  Exclude:
+    - 'lib/omniauth-osso.rb'
+
 Style/Documentation:
   Exclude:
     - 'spec/**/*'

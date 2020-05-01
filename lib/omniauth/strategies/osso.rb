@@ -14,16 +14,27 @@ module OmniAuth
       option :client_secret, nil
       option :client_options, { site: ENV['OSSO_BASE_URL'] }
       option :authorize_params, { state: SecureRandom.hex(24) }
-      option :authorize_options, %i[state domain]
+      option :authorize_options, %i[state]
       option :token_params, {}
       option :token_options, []
       option :auth_token_params, {}
       option :provider_ignores_state, false
 
+      def request_phase
+        redirect(
+          client
+            .auth_code
+            .authorize_url(
+              {
+                redirect_uri: callback_url,
+                domain: request_domain
+              }.merge(authorize_params)
+            )
+        )
+      end
+
       def authorize_params
         params = options.authorize_params.merge(options_for('authorize')) || {}
-
-        raise StandardError if params[:domain].nil?
 
         if OmniAuth.config.test_mode
           @env ||= {}
@@ -55,14 +66,14 @@ module OmniAuth
 
       protected
 
-      def options_for(option)
-        options_for = options.send(:"#{option}_options")
-        params_for = options.send(:"#{option}_params")
+      def request_domain
+        return @request_domain if defined?(@request_domain)
 
-        options_for.each_with_object({}) do |key, hash|
-          value = params_for[key] || options[key]
-          hash[key.to_sym] = value.respond_to?(:call) ? value.call : value
-        end
+        @request_domain = request.params['domain'] || request.params['email'].split('@')[1]
+
+        raise StandardError if @request_domain.nil?
+
+        @request_domain
       end
     end
   end

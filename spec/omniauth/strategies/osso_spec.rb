@@ -39,32 +39,16 @@ describe OmniAuth::Strategies::Osso do
   describe '#authorize_params' do
     subject { fresh_strategy }
 
-    it 'includes the domain authorize param passed in the :authorize_params option' do
-      instance = subject.new('abc', 'def', authorize_params: { domain: 'bar.com' })
-      expect(instance.authorize_params['domain']).to eq('bar.com')
-    end
-
-    it 'includes top-level domain' do
-      instance = subject.new('abc', 'def', domain: 'bar.com')
-      expect(instance.authorize_params['domain']).to eq('bar.com')
-      expect(instance.authorize_params['state']).not_to be_empty
-    end
-
     it 'includes random state in the authorize params' do
-      instance = subject.new('abc', 'def', authorize_params: { domain: 'bar.com' })
+      instance = subject.new('abc', 'def')
       expect(instance.authorize_params.keys).to include('state')
       expect(instance.session['omniauth.state']).not_to be_empty
     end
 
     it 'includes custom state in the authorize params' do
-      instance = subject.new('abc', 'def', authorize_params: { state: proc { 'qux' }, domain: 'foo.com' })
+      instance = subject.new('abc', 'def', authorize_params: { state: 'qux' })
       expect(instance.authorize_params.keys).to include('state')
       expect(instance.session['omniauth.state']).to eq('qux')
-    end
-
-    it 'includes state and domain as authorize options' do
-      instance = subject.new('abc', 'def', domain: 'foo.com')
-      expect(instance.authorize_params.keys).to eq(%w[state domain])
     end
   end
 
