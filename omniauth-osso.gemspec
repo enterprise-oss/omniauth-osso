@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.description   = 'An OAuth 2.0 OmniAuth provider for Osso SSO.'
   gem.summary       = gem.description
   gem.homepage      = 'https://github.com/enterprise-oss/omniauth-osso'
-  gem.license       = 'MIT'
+  gem.license       = 'BSL'
 
   gem.add_dependency 'omniauth-oauth2', '~> 1.6.0'
   gem.add_development_dependency 'bundler', '~> 2.1'
