@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'omniauth-oauth2'
-require 'pry'
 
 module OmniAuth
   module Strategies
@@ -65,6 +64,10 @@ module OmniAuth
       end
 
       protected
+
+      def callback_url
+        ENV['OSSO_REDIRECT_URI'] || super
+      end
 
       def request_domain
         return @request_domain if defined?(@request_domain)
