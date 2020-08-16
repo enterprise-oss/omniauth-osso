@@ -2,6 +2,6 @@
 
 module OmniAuth
   module Osso
-    VERSION = '0.1.3'
+    VERSION = '1.0.0.rc'
   end
 end
