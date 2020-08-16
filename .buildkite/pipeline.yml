@@ -1,0 +1,12 @@
+steps:
+  - name: ":rspec:"
+    commands: 
+      - bundle install
+      - bundle exec rspec
+  
+  - block: ":rubygems: Publish :red_button:"
+    branches: "main"
+  
+  - name: "Push :rubygems:"
+    commands: "./bin/publish"
+    branches: "main"
