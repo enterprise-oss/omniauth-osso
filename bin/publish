@@ -1,0 +1,18 @@
+#!/bin/sh
+# Scriptacular - gemify.sh
+# Create a Ruby gem and push it to rubygems.org
+# Copyright 2013 Christopher Simpkins
+# MIT License
+
+GEM_NAME="omniauth-osso"
+GEMSPEC_SUFFIX=".gemspec"
+
+# run the gem build and parse for the gem release filename
+GEM_BUILD_NAME=$(gem build "$GEM_NAME$GEMSPEC_SUFFIX" |  awk '/File/ {print $2}' -)
+
+if [ -z "$GEM_BUILD_NAME" ]; then
+  echo "The gem build failed." >&2
+  exit 1
+fi
+
+gem push $GEM_BUILD_NAME
