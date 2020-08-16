@@ -4,7 +4,7 @@ steps:
       - bundle install
       - bundle exec rspec
 
-  - name: "rubocop :police_officer:"
+  - name: "rubocop :male-police-officer:"
     commands: 
       - bundle install
       - bundle exec rubocop
