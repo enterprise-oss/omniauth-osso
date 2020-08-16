@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omniauth-osso (0.1.3)
+    omniauth-osso (1.0.0.rc)
       omniauth-oauth2 (~> 1.6.0)
 
 GEM
@@ -21,7 +21,7 @@ GEM
     jaro_winkler (1.5.4)
     jwt (2.2.1)
     method_source (1.0.0)
-    multi_json (1.14.1)
+    multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     oauth2 (1.4.4)

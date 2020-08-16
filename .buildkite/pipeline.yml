@@ -3,6 +3,11 @@ steps:
     commands: 
       - bundle install
       - bundle exec rspec
+
+  - name: "rubocop :police_officer:"
+    commands: 
+      - bundle install
+      - bundle exec rubocop
   
   - block: ":rubygems: Publish :red_button:"
     branches: "main"
