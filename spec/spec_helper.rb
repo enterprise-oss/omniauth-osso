@@ -38,8 +38,5 @@ end
 
 RSpec.configure do |config|
   config.include RSpecMixin
-
-  # OmniAuth.config.test_mode = true
-  # OmniAuth.config.logger = Logger.new('/dev/null')
   WebMock.disable_net_connect!(allow_localhost: true)
 end

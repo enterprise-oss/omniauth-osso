@@ -46,28 +46,90 @@ describe OmniAuth::Strategies::Osso do
     end
 
     it 'includes custom state in the authorize params' do
-      instance = subject.new('abc', 'def', authorize_params: { state: 'qux' })
+      instance = subject.new('abc', 'def', state: 'qux')
       expect(instance.authorize_params.keys).to include('state')
       expect(instance.session['omniauth.state']).to eq('qux')
     end
   end
-
-  describe '#token_params' do
+ 
+  describe '#request_params' do
+    let(:url) { 'https://example.com/auth/osso' }
     subject { fresh_strategy }
 
-    it 'includes any authorize params passed in the :authorize_params option' do
-      instance = subject.new('abc', 'def', token_params: { foo: 'bar', baz: 'zip' })
-      expect(instance.token_params).to eq('foo' => 'bar', 'baz' => 'zip')
+    before do
+      ENV['OSSO_REDIRECT_URI'] = url
+      ENV['OSSO_BASE_URL'] = 'https://osso-base.com'
+    end
+  
+    it 'includes domain passed as a request param' do
+      instance = subject.new('abc', 'def')
+      allow(instance).to receive(:request) do
+        double('Request', params: { 'domain' => 'example.com' }, scheme: 'https', url: url)
+      end
+
+      expect(instance.request_params[:domain]).to eq('example.com')
     end
 
-    it 'includes top-level options that are marked as :authorize_options' do
-      instance = subject.new('abc', 'def', token_options: %i[scope foo], scope: 'bar', foo: 'baz')
-      expect(instance.token_params).to eq('scope' => 'bar', 'foo' => 'baz')
+    it 'includes domain when an email address is passed as an authorize option' do
+      instance = subject.new('abc', 'def')
+
+      allow(instance).to receive(:request) do
+        double('Request', params: { 'email' => 'user@example.com' }, scheme: 'https', url: url)
+      end
+
+      expect(instance.request_params[:domain]).to eq('example.com')
     end
   end
 
+  # We need to get a little hacky with testing the callback phase
+  # in order to cover IDP initiated flows. When a user opens
+  # an SP app by clicking a tile on their IDP, then the OAuth flow
+  # skips the first leg, and we have to ignore CSRF protection.
+  # Osso will send `state=IDP_INITIATED_FLOW` when this is the case,
+  # and here we ensure that our strategy completes the callback phase
+  # with this state param.
+
   describe '#callback_phase' do
     subject { fresh_strategy }
+    let(:url) { 'https://example.com/auth/osso/callback' }
+    let(:instance) { subject.new(app, 'abc', 'def') }
+
+    before do
+      OmniAuth.config.test_mode = true
+      ENV['OSSO_REDIRECT_URI'] = url
+      ENV['OSSO_BASE_URL'] = 'https://osso-base.com'
+      allow(instance).to receive(:auth_hash) { auth_hash }
+      instance.env = {}
+    end
+
+    let :auth_hash do
+      {
+        provider: 'osso',
+        uid: 'uuid',
+        info: {
+          email: 'user@enterprise.com',
+          name: 'user@enterprise.com'
+        },
+        credentials: {
+        },
+        extra: {
+        }
+      }
+    end
+
+    it 'allows callbacks with IDP_INITIATED state param' do
+      allow(instance).to receive(:request) do
+        double('Request', params: { 'state' => 'IDP_INITIATED' }, scheme: 'https', url: url)
+      end
+
+      allow(instance).to receive(:build_access_token) do
+        double('AccessToken', expired?: false, token: 'token')
+      end
+
+      expect(instance).to_not receive(:fail!)
+      instance.callback_phase
+    end
+
     it 'calls fail with the client error received' do
       instance = subject.new('abc', 'def')
       allow(instance).to receive(:request) do
