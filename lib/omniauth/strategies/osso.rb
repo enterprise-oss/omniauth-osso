@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'omniauth-oauth2'
-require 'pry'
+
 module OmniAuth
   module Strategies
     # The main source for the Osso Omniauth Strategy
