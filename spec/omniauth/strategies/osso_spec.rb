@@ -51,7 +51,7 @@ describe OmniAuth::Strategies::Osso do
       expect(instance.session['omniauth.state']).to eq('qux')
     end
   end
- 
+
   describe '#request_params' do
     let(:url) { 'https://example.com/auth/osso' }
     subject { fresh_strategy }
@@ -60,7 +60,7 @@ describe OmniAuth::Strategies::Osso do
       ENV['OSSO_REDIRECT_URI'] = url
       ENV['OSSO_BASE_URL'] = 'https://osso-base.com'
     end
-  
+
     it 'includes domain passed as a request param' do
       instance = subject.new('abc', 'def')
       allow(instance).to receive(:request) do

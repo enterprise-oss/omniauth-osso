@@ -11,6 +11,7 @@ module OmniAuth
       option :name, 'osso'
       option :client_id, nil
       option :client_secret, nil
+      option :authorize_options, %i[state]
       option :provider_ignores_state, false
 
       def request_phase
@@ -49,7 +50,7 @@ module OmniAuth
         @raw_info ||= access_token.get("/oauth/me?access_token=#{access_token.token}").parsed
       end
 
-      def callback_phase
+      def callback_phase # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
         error = request.params['error_reason'] || request.params['error']
 
         if error
