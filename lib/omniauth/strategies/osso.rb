@@ -27,7 +27,7 @@ module OmniAuth
 
       def request_params
         {
-          redirect_uri: callback_url,
+          redirect_uri: callback_url
         }.merge(user_param)
       end
 
@@ -90,7 +90,7 @@ module OmniAuth
 
         @user_param = {
           domain: request.params['domain'],
-          email: request.params['email'],
+          email: request.params['email']
         }.compact
 
         raise StandardError if @user_param.nil?
