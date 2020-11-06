@@ -28,8 +28,7 @@ module OmniAuth
       def request_params
         {
           redirect_uri: callback_url,
-          domain: request_domain
-        }
+        }.merge(user_param)
       end
 
       uid { raw_info['id'] }
@@ -86,14 +85,17 @@ module OmniAuth
         ENV['OSSO_REDIRECT_URI'] || super
       end
 
-      def request_domain
-        return @request_domain if defined?(@request_domain)
+      def user_param
+        return @user_param if defined?(@user_param)
 
-        @request_domain = request.params['domain'] || request.params['email'].split('@')[1]
+        @user_param = {
+          domain: request.params['domain'],
+          email: request.params['email'],
+        }.compact
 
-        raise StandardError if @request_domain.nil?
+        raise StandardError if @user_param.nil?
 
-        @request_domain
+        @user_param
       end
     end
   end
