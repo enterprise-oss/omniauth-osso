@@ -42,7 +42,8 @@ module OmniAuth
 
       extra do
         {
-          idp: raw_info['idp']
+          idp: raw_info['idp'],
+          requested: raw_info['requested']
         }
       end
 
