@@ -70,14 +70,14 @@ describe OmniAuth::Strategies::Osso do
       expect(instance.request_params[:domain]).to eq('example.com')
     end
 
-    it 'includes domain when an email address is passed as an authorize option' do
+    it 'includes email when an email address is passed as an authorize option' do
       instance = subject.new('abc', 'def')
 
       allow(instance).to receive(:request) do
         double('Request', params: { 'email' => 'user@example.com' }, scheme: 'https', url: url)
       end
 
-      expect(instance.request_params[:domain]).to eq('example.com')
+      expect(instance.request_params[:email]).to eq('user@example.com')
     end
   end
 

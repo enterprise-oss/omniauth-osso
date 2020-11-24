@@ -19,4 +19,5 @@ Gem::Specification.new do |gem|
   gem.name          = 'omniauth-osso'
   gem.require_paths = ['lib']
   gem.version       = OmniAuth::Osso::VERSION
+  gem.required_ruby_version = '~> 2.4'
 end
