@@ -57,8 +57,7 @@ describe OmniAuth::Strategies::Osso do
     subject { fresh_strategy }
 
     before do
-      ENV['OSSO_REDIRECT_URI'] = url
-      ENV['OSSO_BASE_URL'] = 'https://osso-base.com'
+      OmniAuth.config.full_host = 'https://osso-base.com'
     end
 
     it 'includes domain passed as a request param' do
@@ -96,7 +95,6 @@ describe OmniAuth::Strategies::Osso do
 
     before do
       OmniAuth.config.test_mode = true
-      ENV['OSSO_REDIRECT_URI'] = url
       ENV['OSSO_BASE_URL'] = 'https://osso-base.com'
       allow(instance).to receive(:auth_hash) { auth_hash }
       instance.env = {}
