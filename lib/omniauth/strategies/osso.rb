@@ -92,10 +92,6 @@ module OmniAuth
           domain: request.params['domain'],
           email: request.params['email']
         }.compact
-
-        raise StandardError if @user_param.nil?
-
-        @user_param
       end
     end
   end
