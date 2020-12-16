@@ -7,9 +7,9 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 group :test do
   gem 'pry'
   gem 'rack-test'
-  gem 'rspec', '~> 3.2'
+  gem 'rspec', '~> 3.10'
   gem 'rubocop'
-  gem 'webmock', '~> 3.0'
+  gem 'webmock', '~> 3.10'
 end
 
 gemspec
