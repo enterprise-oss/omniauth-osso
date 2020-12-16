@@ -82,7 +82,7 @@ module OmniAuth
       protected
 
       def callback_url
-        ENV['OSSO_REDIRECT_URI'] || super
+        full_host + script_name + callback_path
       end
 
       def user_param
