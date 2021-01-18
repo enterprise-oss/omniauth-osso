@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'pry'
 
 describe OmniAuth::Strategies::Osso do
   let(:fresh_strategy) { Class.new(OmniAuth::Strategies::Osso) }
@@ -62,6 +63,7 @@ describe OmniAuth::Strategies::Osso do
 
     it 'includes domain passed as a request param' do
       instance = subject.new('abc', 'def')
+      instance.env = {}
       allow(instance).to receive(:request) do
         double('Request', params: { 'domain' => 'example.com' }, scheme: 'https', url: url)
       end
@@ -71,11 +73,10 @@ describe OmniAuth::Strategies::Osso do
 
     it 'includes email when an email address is passed as an authorize option' do
       instance = subject.new('abc', 'def')
-
+      instance.env = {}
       allow(instance).to receive(:request) do
         double('Request', params: { 'email' => 'user@example.com' }, scheme: 'https', url: url)
       end
-
       expect(instance.request_params[:email]).to eq('user@example.com')
     end
   end
@@ -129,7 +130,6 @@ describe OmniAuth::Strategies::Osso do
     end
 
     it 'calls fail with the client error received' do
-      instance = subject.new('abc', 'def')
       allow(instance).to receive(:request) do
         double('Request', params: { 'error_reason' => 'user_denied', 'error' => 'access_denied' })
       end
