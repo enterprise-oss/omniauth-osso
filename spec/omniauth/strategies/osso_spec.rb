@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'pry'
 
 describe OmniAuth::Strategies::Osso do
   let(:fresh_strategy) { Class.new(OmniAuth::Strategies::Osso) }
