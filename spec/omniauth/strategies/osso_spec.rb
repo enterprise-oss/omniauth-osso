@@ -70,13 +70,48 @@ describe OmniAuth::Strategies::Osso do
       expect(instance.request_params[:domain]).to eq('example.com')
     end
 
-    it 'includes email when an email address is passed as an authorize option' do
+    it 'includes email passed as a request param' do
       instance = subject.new('abc', 'def')
       instance.env = {}
       allow(instance).to receive(:request) do
         double('Request', params: { 'email' => 'user@example.com' }, scheme: 'https', url: url)
       end
+
       expect(instance.request_params[:email]).to eq('user@example.com')
+    end
+
+    it 'only includes email as a request param when both keys are provided' do
+      instance = subject.new('abc', 'def')
+      instance.env = {}
+      allow(instance).to receive(:request) do
+        double('Request', params: { 'email' => 'user@example.com', 'domain' => 'example.com' }, scheme: 'https',
+                          url: url)
+      end
+
+      expect(instance.request_params[:email]).to eq('user@example.com')
+      expect(instance.request_params.keys).to_not include(:domain)
+    end
+
+    it 'domain as a request param when email key is a blank string' do
+      instance = subject.new('abc', 'def')
+      instance.env = {}
+      allow(instance).to receive(:request) do
+        double('Request', params: { 'email' => '', 'domain' => 'example.com' }, scheme: 'https',
+                          url: url)
+      end
+
+      expect(instance.request_params[:domain]).to eq('example.com')
+      expect(instance.request_params.keys).to_not include(:email)
+    end
+
+    it 'only includes redirect_uri as a request param if neither email or domain are provided' do
+      instance = subject.new('abc', 'def')
+      instance.env = {}
+      allow(instance).to receive(:request) do
+        double('Request', params: {}, scheme: 'https', url: url)
+      end
+
+      expect(instance.request_params.keys).to eq([:redirect_uri])
     end
   end
 
