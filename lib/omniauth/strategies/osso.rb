@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'omniauth-oauth2'
-
+require 'pry'
 module OmniAuth
   module Strategies
     # The main source for the Osso Omniauth Strategy
@@ -88,10 +88,11 @@ module OmniAuth
       def user_param
         return @user_param if defined?(@user_param)
 
-        @user_param = {
-          domain: request.params['domain'],
-          email: request.params['email']
-        }.compact
+        @user_param = {}
+        @user_param = { domain: request.params['domain'] } if request.params['domain']
+        @user_param = { email: request.params['email'] } if request.params['email']
+
+        @user_param
       end
     end
   end
