@@ -84,7 +84,8 @@ describe OmniAuth::Strategies::Osso do
       instance = subject.new('abc', 'def')
       instance.env = {}
       allow(instance).to receive(:request) do
-        double('Request', params: { 'email' => 'user@example.com', 'domain' => 'example.com' }, scheme: 'https', url: url)
+        double('Request', params: { 'email' => 'user@example.com', 'domain' => 'example.com' }, scheme: 'https',
+                          url: url)
       end
 
       expect(instance.request_params[:email]).to eq('user@example.com')
@@ -95,7 +96,7 @@ describe OmniAuth::Strategies::Osso do
       instance = subject.new('abc', 'def')
       instance.env = {}
       allow(instance).to receive(:request) do
-        double('Request', params: { }, scheme: 'https', url: url)
+        double('Request', params: {}, scheme: 'https', url: url)
       end
 
       expect(instance.request_params.keys).to eq([:redirect_uri])
