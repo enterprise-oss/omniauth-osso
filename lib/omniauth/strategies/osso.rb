@@ -88,7 +88,7 @@ module OmniAuth
       def user_param
         return @user_param if defined?(@user_param)
 
-        params = request.params.reject{|k,v| v.empty? }
+        params = request.params.reject { |_k, v| v.empty? }
 
         @user_param = {}
         @user_param = { domain: request.params['domain'] } if params['domain']
