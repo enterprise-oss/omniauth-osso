@@ -9,7 +9,7 @@ group :test do
   gem 'rack-test'
   gem 'rspec', '~> 3.10'
   gem 'rubocop'
-  gem 'webmock', '~> 3.11'
+  gem 'webmock', '~> 3.12'
 end
 
 gemspec
